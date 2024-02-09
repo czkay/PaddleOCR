@@ -1422,7 +1422,7 @@ class MainWindow(QMainWindow):
     def scrollRequest(self, delta, orientation):
         units = - delta / (8 * 15)
         bar = self.scrollBars[orientation]
-        bar.setValue(bar.value() + bar.singleStep() * units)
+        bar.setValue(int(bar.value()) + bar.singleStep() * int(units))
 
     def setZoom(self, value):
         self.actions.fitWidth.setChecked(False)
@@ -2831,7 +2831,7 @@ def main():
 
 if __name__ == '__main__':
 
-    resource_file = './libs/resources.py'
+    resource_file = 'PPOCRLabel/libs/resources.py'
     if not os.path.exists(resource_file):
         output = os.system('pyrcc5 -o libs/resources.py resources.qrc')
         assert output == 0, "operate the cmd have some problems ,please check  whether there is a in the lib " \
