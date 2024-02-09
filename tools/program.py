@@ -445,21 +445,6 @@ def train(config,
                         metadata=best_model_dict)
 
             reader_start = time.time()
-        if dist.get_rank() == 0:
-            save_model(
-                model,
-                optimizer,
-                save_model_dir,
-                logger,
-                config,
-                is_best=False,
-                prefix='latest',
-                best_model_dict=best_model_dict,
-                epoch=epoch,
-                global_step=global_step)
-
-            if log_writer is not None:
-                log_writer.log_model(is_best=False, prefix="latest")
 
         if dist.get_rank() == 0 and epoch > 0 and epoch % save_epoch_step == 0:
             save_model(
