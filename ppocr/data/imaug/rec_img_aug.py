@@ -716,7 +716,7 @@ def jitter(img):
         return img
 
 
-def add_gasuss_noise(image, mean=0, var=0.1):
+def add_gasuss_noise(image, mean=0, var=5000):
     """
     Gasuss noise
     """
