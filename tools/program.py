@@ -425,24 +425,26 @@ def train(config,
                         best_model_dict=best_model_dict,
                         epoch=epoch,
                         global_step=global_step)
+
+                    if log_writer is not None:
+                        log_writer.log_metrics(
+                            metrics={
+                                "best_{}".format(main_indicator):
+                                    best_model_dict[main_indicator]
+                            },
+                            prefix="EVAL",
+                            step=global_step)
+
+                        logger.info(f'Saving current best-accuracy model (Epoch {epoch})')
+                        log_writer.log_model(
+                            is_best=True,
+                            prefix="best_accuracy",
+                            metadata=best_model_dict)
+
                 best_str = 'best metric, {}'.format(', '.join([
                     '{}: {}'.format(k, v) for k, v in best_model_dict.items()
                 ]))
                 logger.info(best_str)
-                # logger best metric
-                if log_writer is not None:
-                    log_writer.log_metrics(
-                        metrics={
-                            "best_{}".format(main_indicator):
-                            best_model_dict[main_indicator]
-                        },
-                        prefix="EVAL",
-                        step=global_step)
-
-                    log_writer.log_model(
-                        is_best=True,
-                        prefix="best_accuracy",
-                        metadata=best_model_dict)
 
             reader_start = time.time()
 
