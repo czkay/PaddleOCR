@@ -64,7 +64,7 @@ class MainWindow(QMainWindow):
     FIT_WINDOW, FIT_WIDTH, MANUAL_ZOOM = list(range(3))
 
     def __init__(self,
-                 lang="ch",
+                 lang="en",
                  gpu=False,
                  kie_mode=False,
                  default_filename=None,
@@ -94,13 +94,25 @@ class MainWindow(QMainWindow):
         self.key_dialog_tip = getStr('keyDialogTip')
 
         self.defaultSaveDir = default_save_dir
-        self.ocr = PaddleOCR(use_pdserving=False,
-                             use_angle_cls=True,
-                             det=True,
-                             cls=True,
-                             use_gpu=gpu,
-                             lang=lang,
-                             show_log=False)
+        self.ocr = PaddleOCR(
+            use_angle_cls=False,
+            det_model_dir='/Users/zikangc/Documents/docusense/models/image_extractor/det',
+            rec_model_dir='/Users/zikangc/Documents/docusense/models/image_extractor/rec',
+            cls_model_dir='/Users/zikangc/Documents/docusense/models/image_extractor/cls',
+            lang=lang,
+            use_onnx=False,
+            use_gpu=gpu,
+            use_dilation=True,
+            det_db_unclip_ratio=1.85,
+            det_db_score_mode='slow',
+        )
+        # self.ocr = PaddleOCR(use_pdserving=False,
+        #                      use_angle_cls=True,
+        #                      det=True,
+        #                      cls=True,
+        #                      use_gpu=gpu,
+        #                      lang=lang,
+        #                      show_log=False)
         self.table_ocr = PPStructure(use_pdserving=False,
                                      use_gpu=gpu,
                                      lang=lang,
@@ -2014,7 +2026,7 @@ class MainWindow(QMainWindow):
             msg = u'您有未保存的变更, 您想保存再继续吗?\n点击 "No" 丢弃所有未保存的变更.'
         else:
             msg = u'You have unsaved changes, would you like to save them and proceed?\nClick "No" to undo all changes.'
-        return QMessageBox.warning(self, u'Attention', msg, yes | no | cancel)
+        return QMessageBox.warning(self, u'Attention', msg, yes | no | cancel, defaultButton=yes)
 
     def errorMessage(self, title, message):
         return QMessageBox.critical(self, title,
